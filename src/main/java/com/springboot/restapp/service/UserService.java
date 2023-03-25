@@ -2,17 +2,18 @@ package com.springboot.restapp.service;
 
 import java.util.List;
 
+import com.springboot.restapp.dto.UserDTO;
 import com.springboot.restapp.entity.User;
 
 public interface UserService {
 	
-	User createUser(User user);
+	UserDTO createUser(UserDTO user);
 	
-	User getUserById(Long userId);
+	UserDTO getUserById(Long userId);
 	
-	List<User> getAllUsers();
+	List<UserDTO> getAllUsers();
 	
-	User updateUser(User user);
+	UserDTO updateUser(UserDTO user);
 	
 	void deleteUser(Long userId);
 }
