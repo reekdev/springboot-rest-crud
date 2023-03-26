@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +21,21 @@ import lombok.AllArgsConstructor;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public UserDTO createUser(UserDTO userDto) {
 		
 		// convert UserDTO into User JPA entity
-		User user = UserMapper.mapToUser(userDto);
+		// User user = UserMapper.mapToUser(userDto);
+		User user = modelMapper.map(userDto, User.class);
 		User savedUser = userRepository.save(user);
 		
 		// Convert User JPA entity into UserDTO
-		UserDTO savedUserDto = UserMapper.mapTUserDTO(savedUser);
+		// UserDTO savedUserDto = UserMapper.mapTUserDTO(savedUser);
+		UserDTO savedUserDto = modelMapper.map(savedUser, UserDTO.class);
 		return savedUserDto;
 	}
 
@@ -37,14 +43,19 @@ public class UserServiceImpl implements UserService {
 	public UserDTO getUserById(Long userId) {
 		Optional<User> possibleUser = userRepository.findById(userId);
 		User user = possibleUser.get();
-		return UserMapper.mapTUserDTO(user);
+		// return UserMapper.mapTUserDTO(user);
+		return modelMapper.map(user, UserDTO.class);
 	}
 
 	@Override
 	public List<UserDTO> getAllUsers() {
 		List<User> possibleUsers = userRepository.findAll();
+		/*
+		 * return possibleUsers.stream() .map(UserMapper::mapTUserDTO)
+		 * .collect(Collectors.toList());
+		 */
 		return possibleUsers.stream()
-				.map(UserMapper::mapTUserDTO)
+				.map((users) -> modelMapper.map(users, UserDTO.class))
 				.collect(Collectors.toList());
 	}
 
@@ -55,7 +66,8 @@ public class UserServiceImpl implements UserService {
 		existingUser.setUserLastName(user.getUserLastName());
 		existingUser.setUserEmail(user.getUserEmail());
 		User updatedUser = userRepository.save(existingUser);
-		return UserMapper.mapTUserDTO(updatedUser);
+		// return UserMapper.mapTUserDTO(updatedUser);
+		return modelMapper.map(updatedUser, UserDTO.class);
 	}
 
 	@Override
