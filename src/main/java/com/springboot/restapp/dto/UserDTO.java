@@ -1,7 +1,5 @@
 package com.springboot.restapp.dto;
 
-import jakarta.persistence.Column;
-
 public class UserDTO {
 	private Long userId;
 	private String userFirstName;

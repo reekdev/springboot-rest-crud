@@ -1,11 +1,13 @@
 package com.springboot.restapp.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 import com.springboot.restapp.dto.UserDTO;
+import com.springboot.restapp.exception.ErrorDetails;
+import com.springboot.restapp.exception.ResourceNotFoundException;
 import com.springboot.restapp.service.UserService;
 
 import lombok.AllArgsConstructor;
@@ -64,5 +69,27 @@ public class UserController {
 		userService.deleteUser(userId);
 		return new ResponseEntity<>("user is successfully deleted.", HttpStatus.OK);
 	}
+	
+	/* 
+	handling custom exception: this is how we write specific exception related to a controller
+	we use @ExceptionHandler to handle exceptions for a specific controller
+	*/
+	
+	/* 
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<ErrorDetails> handleResourceNotFoundException(
+			ResourceNotFoundException exception,
+			WebRequest webRequest) {
+		
+		ErrorDetails errorDetails = new ErrorDetails(
+				LocalDateTime.now(),
+				exception.getMessage(),
+				webRequest.getDescription(false),
+				"USER_NOT_FOUND"
+		);
+		
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+	}
+	*/
 	
 }
