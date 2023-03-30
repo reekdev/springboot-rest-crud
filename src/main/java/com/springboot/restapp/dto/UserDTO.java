@@ -1,9 +1,19 @@
 package com.springboot.restapp.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+
 public class UserDTO {
 	private Long userId;
+	
+	@NotEmpty(message = "this field cannot be empty")
 	private String userFirstName;
+	
+	@NotEmpty(message = "this field cannot be empty")
 	private String userLastName;
+	
+	@NotEmpty(message = "this field cannot be empty")
+	@Email(message = "this field must be a valid email address")
 	private String userEmail;
 
 	public Long getUserId() {

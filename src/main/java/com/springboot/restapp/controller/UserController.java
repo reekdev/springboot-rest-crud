@@ -22,6 +22,7 @@ import com.springboot.restapp.exception.ErrorDetails;
 import com.springboot.restapp.exception.ResourceNotFoundException;
 import com.springboot.restapp.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -34,7 +35,7 @@ public class UserController {
 	
 	// REST API: create a user
 	@PostMapping()
-	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user) {
+	public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO user) {
 		UserDTO newUser = userService.createUser(user);
 		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 	}
@@ -57,7 +58,7 @@ public class UserController {
 	@PutMapping("{id}")
 	public ResponseEntity<UserDTO> updateUser(
 			@PathVariable("id") Long userId,
-			@RequestBody UserDTO user) {
+			@Valid @RequestBody UserDTO user) {
 		user.setUserId(userId);
 		UserDTO updatedUser = userService.updateUser(user);
 		return new ResponseEntity<>(updatedUser, HttpStatus.OK);
